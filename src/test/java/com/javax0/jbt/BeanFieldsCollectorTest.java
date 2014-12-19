@@ -23,24 +23,27 @@ public class BeanFieldsCollectorTest {
 	}
 
 	@Test
-	public void collectsAllDeclaredFields() {
+	public void collectsAllDeclaredFields() throws InstantiationException,
+			IllegalAccessException {
 		Collection<String> fields = new BeanFieldsCollector(Object.class,
-				BeanClass.class).collect();
+				BeanClass.class).map().keySet();
 		Assert.assertEquals(1, fields.size());
 		Assert.assertEquals("stringField", fields.toArray()[0]);
 	}
 
 	@Test
-	public void ignoresFieldsToBeIgnored() {
+	public void ignoresFieldsToBeIgnored() throws InstantiationException,
+			IllegalAccessException {
 		Collection<String> fields = new BeanFieldsCollector(TestClass.class,
-				BeanClass.class).collect();
+				BeanClass.class).map().keySet();
 		Assert.assertEquals(0, fields.size());
 	}
 
 	@Test
-	public void ignoresStaticFields() {
+	public void ignoresStaticFields() throws InstantiationException,
+			IllegalAccessException {
 		Collection<String> fields = new BeanFieldsCollector(TestClass.class,
-				BeanClassWithStaticField.class).collect();
+				BeanClassWithStaticField.class).map().keySet();
 		Assert.assertEquals(0, fields.size());
 	}
 
