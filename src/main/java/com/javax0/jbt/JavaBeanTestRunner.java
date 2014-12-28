@@ -1,6 +1,8 @@
 package com.javax0.jbt;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -81,36 +83,80 @@ public class JavaBeanTestRunner extends Runner {
 		final BeanField beanField = beanFields.get(fieldName);
 		assertGetterExists(notifier, beanField);
 		assertSetterExists(notifier, beanField);
-		assertGetSet(notifier, beanField);
+		assertGetSetWorksInPair(notifier, beanField);
 	}
 
-	private void assertGetSet(final TestCaseNotifier notifier,
+	private void assertGetSetWorksInPair(final TestCaseNotifier notifier,
 			final BeanField beanField) {
-		if (beanField.getSetter() != null) {
+		setAllFieldsToNull();
+		if (beanField.hasSetter()) {
 			final Object actual = Mock.forClass(beanField.getType());
-			final Object getterResult;
-			final Object alternateGetterResult;
 			try {
 				beanField.set(actual);
-				if (beanField.getGetter() != null) {
-					getterResult = beanField.get();
-					if (!equal(beanField.getType(), getterResult, actual)) {
-						notifier.failure("getter returned " + getterResult
-								+ " after set(" + actual + ")");
-					}
+				if (beanField.hasGetter()) {
+					getterGivesBackTheSetValue(notifier, beanField, actual);
 				}
-				if (beanField.getAlternateGetter() != null) {
-					alternateGetterResult = beanField.alternateGet();
-					if (!equal(beanField.getType(), alternateGetterResult,
-							actual)) {
-						notifier.failure("alternate getter returned "
-								+ alternateGetterResult + " after set("
-								+ actual + ")");
-					}
+				if (beanField.hasAlternateGetter()) {
+					alternateGetterGivesBackTheSetValue(notifier, beanField,
+							actual);
 				}
+				assertAllFieldsNull(notifier, beanField.getName());
 			} catch (final Exception e) {
 				notifier.failure(e);
 			}
+		}
+	}
+
+	private void assertAllFieldsNull(final TestCaseNotifier notifier,
+			final String actual) {
+		for (final Entry<String, BeanField> field : beanFields.entrySet()) {
+			if (!field.getKey().equals(actual)) {
+				try {
+					final Object object = field.getValue().directGet();
+					if (object != null
+							&& !object.equals(Mock.nullForClass(field
+									.getValue().getType()))) {
+						notifier.failure("Setting field '" + actual
+								+ "' altered '" + field.getKey() + "'");
+					}
+				} catch (IllegalAccessException | IllegalArgumentException
+						| NoSuchFieldException | SecurityException e) {
+					throw new RuntimeException("SNAFU");
+				}
+			}
+		}
+	}
+
+	private void setAllFieldsToNull() {
+		for (final Entry<String, BeanField> field : beanFields.entrySet()) {
+			try {
+				field.getValue().directSet(
+						Mock.nullForClass(field.getValue().getType()));
+			} catch (IllegalAccessException | IllegalArgumentException
+					| NoSuchFieldException | SecurityException e) {
+				throw new RuntimeException("SNAFU", e);
+			}
+		}
+	}
+
+	private void alternateGetterGivesBackTheSetValue(
+			final TestCaseNotifier notifier, final BeanField beanField,
+			final Object actual) throws IllegalAccessException,
+			InvocationTargetException {
+		final Object alternateGetterResult = beanField.alternateGet();
+		if (!equal(beanField.getType(), alternateGetterResult, actual)) {
+			notifier.failure("alternate getter returned "
+					+ alternateGetterResult + " after set(" + actual + ")");
+		}
+	}
+
+	private void getterGivesBackTheSetValue(final TestCaseNotifier notifier,
+			final BeanField beanField, final Object actual)
+			throws IllegalAccessException, InvocationTargetException {
+		final Object getterResult = beanField.get();
+		if (!equal(beanField.getType(), getterResult, actual)) {
+			notifier.failure("getter returned " + getterResult + " after set("
+					+ actual + ")");
 		}
 	}
 

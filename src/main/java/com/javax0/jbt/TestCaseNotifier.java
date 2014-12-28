@@ -4,6 +4,13 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 
+/**
+ * Send notification to the JUNIT framework from a test. The class contains the
+ * JUNIT notifier and the description on which the notification is sent.
+ * 
+ * @author Peter Verhas
+ *
+ */
 public class TestCaseNotifier {
 	@SuppressWarnings("serial")
 	static final class NotificationException extends Exception {
@@ -43,7 +50,7 @@ public class TestCaseNotifier {
 	}
 
 	public void failure(String message) {
-		notifier.fireTestAssumptionFailed(new Failure(testDescription,
+		notifier.fireTestFailure(new Failure(testDescription,
 				new NotificationException(message)));
 	}
 

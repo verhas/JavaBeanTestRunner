@@ -21,6 +21,17 @@ public class StandardNamedBean {
 		this.goodField = goodField;
 	}
 
+	private int crossFieldThatAltersIntField;
+	
+	public int getCrossFieldThatAltersIntField() {
+		return crossFieldThatAltersIntField;
+	}
+
+	public void setCrossFieldThatAltersIntField(int crossFieldThatAltersIntField) {
+		this.intField = crossFieldThatAltersIntField;
+		this.crossFieldThatAltersIntField = crossFieldThatAltersIntField;
+	}
+
 	private int intField;
 
 	public int getIntField() {

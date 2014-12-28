@@ -10,11 +10,27 @@ import com.google.common.collect.ImmutableMap;
 public class Mock {
 
 	private static final Map<Class<?>, Object> mocks = new ImmutableMap.Builder<Class<?>, Object>()
-			.put(Integer.class, 1).put(String.class, "").put(Long.class, 1L)
-			.put(Boolean.class, true).put(Character.class, 'A')
-			.put(Byte.class, 0xFF).put(int.class, 1).put(long.class, 1L)
+			.put(Short.class, 1).put(Integer.class, 1).put(String.class, "")
+			.put(Long.class, 1L).put(Boolean.class, true)
+			.put(Character.class, 'A').put(Byte.class, 0xFF)
+			.put(short.class, 1).put(int.class, 1).put(long.class, 1L)
 			.put(boolean.class, true).put(char.class, 'A')
 			.put(byte.class, 0xFF).build();
+
+	private static final Map<Class<?>, Object> primitiveNulls = new ImmutableMap.Builder<Class<?>, Object>()
+			.put(short.class, 0).put(int.class, 0).put(long.class, 0L)
+			.put(boolean.class, false).put(char.class, 'a')
+			.put(byte.class, 0x00).build();
+
+	public static Object nullForClass(Class<?> klass) {
+		if (primitiveNulls.containsKey(klass)) {
+			return primitiveNulls.get(klass);
+		}
+		if (klass.isEnum()) {
+			return klass.getEnumConstants()[0];
+		}
+		return null;
+	}
 
 	public static Object forClass(Class<?> klass) {
 		if (mocks.containsKey(klass)) {
