@@ -15,11 +15,13 @@ public class Mock {
 			.put(Character.class, 'A').put(Byte.class, 0xFF)
 			.put(short.class, 1).put(int.class, 1).put(long.class, 1L)
 			.put(boolean.class, true).put(char.class, 'A')
+			.put(float.class, 0.1f).put(double.class, 0.1d)
 			.put(byte.class, 0xFF).build();
 
 	private static final Map<Class<?>, Object> primitiveNulls = new ImmutableMap.Builder<Class<?>, Object>()
 			.put(short.class, 0).put(int.class, 0).put(long.class, 0L)
 			.put(boolean.class, false).put(char.class, 'a')
+			.put(float.class, 0.0f).put(double.class, 0.0d)
 			.put(byte.class, 0x00).build();
 
 	public static Object nullForClass(Class<?> klass) {

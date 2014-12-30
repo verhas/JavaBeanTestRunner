@@ -5,10 +5,11 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 
 /**
+ * 
  * Send notification to the JUNIT framework from a test. The class contains the
  * JUNIT notifier and the description on which the notification is sent.
  * 
- * @author Peter Verhas
+ * @author Peter Verhas <peter@verhas.com>
  *
  */
 public class TestCaseNotifier {
