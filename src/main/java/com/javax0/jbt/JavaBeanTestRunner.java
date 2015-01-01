@@ -11,6 +11,7 @@ import org.junit.runner.notification.RunNotifier;
 
 import com.javax0.jbt.TestCaseNotifier.NotificationException;
 import com.javax0.jbt.exception.JavaBeanFaultyException;
+import com.javax0.jbt.exception.JavaBeanTestFaultyException;
 
 public class JavaBeanTestRunner extends Runner {
 
@@ -29,7 +30,8 @@ public class JavaBeanTestRunner extends Runner {
 			final BeanFieldsCollector collector = new BeanFieldsCollector(
 					testClass, beanClass);
 			beanFields = collector.map();
-		} catch (InstantiationException | IllegalAccessException e) {
+		} catch (InstantiationException | IllegalAccessException
+				| JavaBeanTestFaultyException e) {
 			exception = e;
 		}
 		this.beanFields = beanFields;
@@ -43,7 +45,7 @@ public class JavaBeanTestRunner extends Runner {
 
 	@Override
 	public Description getDescription() {
-		if (suiteDescriptionNeedsInitialization) {
+		if (suiteDescriptionNeedsInitialization && beanFields != null) {
 			for (final String fieldName : beanFields.keySet()) {
 				final Description testDescription = Description
 						.createTestDescription(testClass, fieldName);

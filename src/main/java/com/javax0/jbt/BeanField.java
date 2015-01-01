@@ -43,12 +43,12 @@ public class BeanField {
 		return getAlternateGetter() != null;
 	}
 
-	public boolean hasSetter() {
-		return getSetter() != null;
-	}
-
 	public BeanMethod getSetter() {
 		return setter;
+	}
+
+	public boolean hasSetter() {
+		return getSetter() != null;
 	}
 
 	public void set(Object object) throws IllegalAccessException,

@@ -15,6 +15,9 @@ public class BeanClassCalculatorTest {
 	public static class BeanClassTest {
 	}
 
+	public static class NonExistingClassTest {
+	}
+
 	@Test
 	public void calculatesClassFromTestClassNameRemovingTest() {
 		final Class<?> actual = new BeanClassCalculator(BeanClassTest.class)
@@ -22,16 +25,24 @@ public class BeanClassCalculatorTest {
 		Assert.assertEquals(BeanClass.class, actual);
 	}
 
+	@Test
+	public void calculatesNullFromNonExistingClassTest() {
+		final Class<?> actual = new BeanClassCalculator(
+				NonExistingClassTest.class).calculate();
+		Assert.assertNull(actual);
+	}
+
+	@Test
+	public void calculatesNullFromNonAnnotatedNonTestClass() {
+		final Class<?> actual = new BeanClassCalculator(NonBean.class)
+				.calculate();
+		Assert.assertNull(actual);
+	}
+
+	@Test
 	public void calculatesClassFromTestClassAnnotation() {
 		final Class<?> actual = new BeanClassCalculator(BeanClass.class)
 				.calculate();
 		Assert.assertEquals(BeanClass.class, actual);
-	}
-
-	public void returnNullIfCanNotBeCalculated() {
-
-		final Class<?> actual = new BeanClassCalculator(NonBean.class)
-				.calculate();
-		Assert.assertEquals(null, actual);
 	}
 }
