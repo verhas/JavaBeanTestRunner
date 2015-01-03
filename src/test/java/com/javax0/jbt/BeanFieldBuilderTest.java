@@ -7,7 +7,7 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 public class BeanFieldBuilderTest {
-	static class BeanBasic {
+	static class Bean {
 		private Object field;
 
 		public Object getField() {
@@ -46,7 +46,7 @@ public class BeanFieldBuilderTest {
 
 	@Test
 	public void createsBeanFieldForObjectField() {
-		BeanField beanField = field("field").forBean(new BeanBasic());
+		BeanField beanField = field("field").forBean(new Bean());
 		assertNotNull(beanField.getGetter());
 		assertNotNull(beanField.getSetter());
 		assertNull(beanField.getAlternateGetter());
@@ -54,7 +54,7 @@ public class BeanFieldBuilderTest {
 
 	@Test
 	public void createsBeanFieldForBooleanField() {
-		BeanField beanField = field("booleanField").forBean(new BeanBasic());
+		BeanField beanField = field("booleanField").forBean(new Bean());
 		assertNull(beanField.getGetter());
 		assertNotNull(beanField.getSetter());
 		assertNotNull(beanField.getAlternateGetter());
@@ -62,9 +62,14 @@ public class BeanFieldBuilderTest {
 
 	@Test
 	public void createsBeanFieldForRichBooleanField() {
-		BeanField beanField = field("richBooleanField").forBean(new BeanBasic());
+		BeanField beanField = field("richBooleanField").forBean(new Bean());
 		assertNotNull(beanField.getGetter());
 		assertNotNull(beanField.getSetter());
 		assertNotNull(beanField.getAlternateGetter());
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void createsBeanFieldForRichBooleanField1() {
+		field("nonexistentField").forBean(new Bean());
 	}
 }

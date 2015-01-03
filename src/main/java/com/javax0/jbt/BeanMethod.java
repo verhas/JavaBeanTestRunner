@@ -5,7 +5,8 @@ import java.lang.reflect.Method;
 
 /**
  * A class that contains a method and an object 'bean' that the method has to
- * work on. The method can be a getter or a setter.
+ * work on. The method is a getter or a setter in the application but the
+ * implementation does not restrict the use. It could just be any method.
  * 
  * @author Peter Verhas
  *
@@ -18,10 +19,6 @@ public class BeanMethod {
 		super();
 		this.method = method;
 		this.bean = bean;
-	}
-
-	public Method getMethod() {
-		return method;
 	}
 
 	public Object getBean() {
