@@ -21,9 +21,17 @@ public class MockTest {
 	@Test
 	public void givesObjectForRealObjects() {
 		for (Class<?> klass : collector.getClasses()) {
-			Object value = Mock.forClass(klass);
-			Assert.assertTrue(klass.isAssignableFrom(value.getClass()));
+			if (notMockitoClass(klass)) {
+				Object value = Mock.forClass(klass);
+				Assert.assertTrue(klass.isAssignableFrom(value.getClass()));
+			}
 		}
+	}
+
+	private boolean notMockitoClass(Class<?> klass) {
+		final String className = klass.getCanonicalName();
+		return !(className.startsWith("org.mockito.") || className
+				.contains("EnhancerByMockitoWith"));
 	}
 
 	@Test
@@ -38,6 +46,10 @@ public class MockTest {
 			short.class, int.class, long.class, char.class, boolean.class,
 			float.class, double.class };
 
+	private static final Class<?>[] BOXING_CLASSES = new Class<?>[] {
+			Byte.class, Short.class, Integer.class, Long.class,
+			Character.class, Boolean.class, Float.class, Double.class };
+
 	@Test
 	public void givesNonNullForPrimitives() {
 		for (Class<?> klass : PRIMITIVES) {
@@ -47,10 +59,20 @@ public class MockTest {
 	}
 
 	@Test
-	public void givesSamplesForRealObjects() {
+	public void givesSamplesForPrimitives() {
 		for (Class<?> klass : PRIMITIVES) {
 			Object value = Mock.forClass(klass);
 			Assert.assertNotNull(value);
+		}
+	}
+
+	@Test
+	public void givesSamplesForTheObjectPairsOfPrimitives()
+			throws InstantiationException, IllegalAccessException {
+		for (Class<?> klass : BOXING_CLASSES) {
+			Object value = Mock.forClass(klass);
+			Assert.assertNotNull(value);
+			Assert.assertEquals(klass, value.getClass());
 		}
 	}
 
@@ -67,8 +89,9 @@ public class MockTest {
 	final class Final {
 	}
 
-	@Test(expected=Exception.class)
+	@Test(expected = Exception.class)
 	public void throwsExceptionForFinalClass() {
 		Mock.forClass(Final.class);
 	}
+
 }

@@ -10,19 +10,27 @@ import com.google.common.collect.ImmutableMap;
 public class Mock {
 
 	private static final Map<Class<?>, Object> mocks = new ImmutableMap.Builder<Class<?>, Object>()
-			.put(Short.class, 1).put(Integer.class, 1).put(String.class, "")
-			.put(Long.class, 1L).put(Boolean.class, true)
-			.put(Character.class, 'A').put(Byte.class, 0xFF)
-			.put(short.class, 1).put(int.class, 1).put(long.class, 1L)
-			.put(boolean.class, true).put(char.class, 'A')
-			.put(float.class, 0.1f).put(double.class, 0.1d)
-			.put(byte.class, 0xFF).build();
+			.put(Short.class, Short.valueOf((short) 1))
+			.put(Integer.class, Integer.valueOf(1)).put(String.class, "")
+			.put(Long.class, Long.valueOf(1L)).put(Boolean.class, true)
+			.put(Character.class, 'A')
+			.put(Byte.class, Byte.valueOf((byte) 0xFF))
+			.put(Float.class, Float.valueOf(0.1f))
+			.put(Double.class, Double.valueOf(0.1f))
+			.put(short.class, Short.valueOf((short) 1))
+			.put(int.class, Integer.valueOf(1))
+			.put(long.class, Long.valueOf(1L)).put(boolean.class, true)
+			.put(char.class, 'A').put(float.class, Float.valueOf(0.1f))
+			.put(double.class, Double.valueOf(0.1d))
+			.put(byte.class, Byte.valueOf((byte) 0xFF)).build();
 
 	private static final Map<Class<?>, Object> primitiveNulls = new ImmutableMap.Builder<Class<?>, Object>()
-			.put(short.class, 0).put(int.class, 0).put(long.class, 0L)
-			.put(boolean.class, false).put(char.class, 'a')
-			.put(float.class, 0.0f).put(double.class, 0.0d)
-			.put(byte.class, 0x00).build();
+			.put(short.class, Short.valueOf((short) 0))
+			.put(int.class, Integer.valueOf(0))
+			.put(long.class, Long.valueOf(0L)).put(boolean.class, false)
+			.put(char.class, 'a').put(float.class, Float.valueOf(0.0f))
+			.put(double.class, Double.valueOf(0.0d))
+			.put(byte.class, Byte.valueOf((byte) 0)).build();
 
 	public static Object nullForClass(Class<?> klass) {
 		if (primitiveNulls.containsKey(klass)) {
