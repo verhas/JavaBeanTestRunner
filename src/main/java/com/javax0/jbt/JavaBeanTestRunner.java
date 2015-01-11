@@ -13,31 +13,40 @@ import com.javax0.jbt.TestCaseNotifier.NotificationException;
 import com.javax0.jbt.exception.JavaBeanFaultyException;
 import com.javax0.jbt.exception.JavaBeanTestFaultyException;
 
+/**
+ * Implements a JUNIT Runner that checks that the tested JavaBean conforms
+ * (practically) to the JavaBean conventions. It checks that the
+ * 
+ * @author Peter Verhas <peter@verhas.com>
+ *
+ */
 public class JavaBeanTestRunner extends Runner {
 
 	private final Class<?> testClass;
 	private final Class<?> beanClass;
-	private final Map<String, BeanField> beanFields;
-	private final Exception exceptionDuringCollect;
+	private Map<String, BeanField> beanFields;
+	private Exception exceptionDuringCollect;
 
 	public JavaBeanTestRunner(final Class<?> testClass) {
 		super();
 		this.testClass = testClass;
 		beanClass = new BeanClassCalculator(testClass).calculate();
-		Exception exception = null;
-		Map<String, BeanField> beanFields = null;
+		collectBeanFields(testClass);
+		suiteDescription = Description.createSuiteDescription(
+				this.testClass.getName(), this.testClass.getAnnotations());
+	}
+
+	private void collectBeanFields(final Class<?> testClass) {
+		this.beanFields = null;
+		this.exceptionDuringCollect = null;
 		try {
 			final BeanFieldsCollector collector = new BeanFieldsCollector(
 					testClass, beanClass);
-			beanFields = collector.map();
+			this.beanFields = collector.map();
 		} catch (InstantiationException | IllegalAccessException
 				| JavaBeanTestFaultyException e) {
-			exception = e;
+			this.exceptionDuringCollect = e;
 		}
-		this.beanFields = beanFields;
-		this.exceptionDuringCollect = exception;
-		suiteDescription = Description.createSuiteDescription(
-				this.testClass.getName(), this.testClass.getAnnotations());
 	}
 
 	private final Description suiteDescription;
@@ -146,7 +155,7 @@ public class JavaBeanTestRunner extends Runner {
 			final Object actual) throws IllegalAccessException,
 			InvocationTargetException {
 		final Object alternateGetterResult = beanField.alternateGet();
-		if (!equal(beanField.getType(), alternateGetterResult, actual)) {
+		if (differ(beanField.getType(), alternateGetterResult, actual)) {
 			notifier.failure("alternate getter returned "
 					+ alternateGetterResult + " after set(" + actual + ")");
 		}
@@ -156,18 +165,22 @@ public class JavaBeanTestRunner extends Runner {
 			final BeanField beanField, final Object actual)
 			throws IllegalAccessException, InvocationTargetException {
 		final Object getterResult = beanField.get();
-		if (!equal(beanField.getType(), getterResult, actual)) {
+		if (differ(beanField.getType(), getterResult, actual)) {
 			notifier.failure("getter returned " + getterResult + " after set("
 					+ actual + ")");
 		}
 	}
 
-	private boolean equal(Class<?> type, Object a, Object b) {
+	private boolean differ(Class<?> type, Object a, Object b) {
 		if (type.isPrimitive()) {
-			return (a == null && b == null) || (a != null && a.equals(b));
+			return !equalAutoboxedPrimitives(a, b);
 		} else {
-			return a == b;
+			return a != b;
 		}
+	}
+
+	private boolean equalAutoboxedPrimitives(Object a, Object b) {
+		return (a == null && b == null) || (a != null && a.equals(b));
 	}
 
 	private void assertSetterExists(final TestCaseNotifier notifier,
