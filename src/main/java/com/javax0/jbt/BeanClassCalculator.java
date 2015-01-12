@@ -1,5 +1,7 @@
 package com.javax0.jbt;
 
+import com.javax0.jbt.annotations.Bean;
+
 /**
  * Get the class that has to be tested. The tested class is calculated from the
  * testing class and also can be controlled using annotations.

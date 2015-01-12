@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.javax0.jbt.annotations.Ignore;
 import com.javax0.jbt.exception.CanNotInstantiate;
 import com.javax0.jbt.exception.IgnoredFieldDoesNotExist;
 import com.javax0.jbt.exception.IgnoredFieldHasWrongType;

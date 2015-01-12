@@ -5,6 +5,8 @@ import java.util.Collection;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.javax0.jbt.annotations.Bean;
+import com.javax0.jbt.annotations.Ignore;
 import com.javax0.jbt.exception.IgnoredFieldDoesNotExist;
 import com.javax0.jbt.exception.IgnoredFieldHasWrongType;
 import com.javax0.jbt.exception.JavaBeanFaultyException;

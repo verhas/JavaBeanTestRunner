@@ -3,6 +3,8 @@ package com.javax0.jbt;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.javax0.jbt.annotations.Bean;
+
 public class BeanClassCalculatorTest {
 
 	public static class NonBean {
