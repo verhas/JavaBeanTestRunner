@@ -43,8 +43,7 @@ public class JavaBeanTestRunner extends Runner {
 			final BeanFieldsCollector collector = new BeanFieldsCollector(
 					testClass, beanClass);
 			this.beanFields = collector.map();
-		} catch (InstantiationException | IllegalAccessException
-				| JavaBeanTestFaultyException e) {
+		} catch (JavaBeanFaultyException | JavaBeanTestFaultyException e) {
 			this.exceptionDuringCollect = e;
 		}
 	}
@@ -67,25 +66,31 @@ public class JavaBeanTestRunner extends Runner {
 
 	@Override
 	public void run(final RunNotifier runNotifier) {
-		for (final String fieldName : beanFields.keySet()) {
-			final Description testDescription = Description
-					.createTestDescription(testClass, fieldName);
-			final TestCaseNotifier notifier = new TestCaseNotifier(runNotifier,
-					testDescription);
-			notifier.start();
-			if (exceptionDuringCollect != null) {
-				runNotifier.fireTestFailure(new Failure(testDescription,
-						exceptionDuringCollect));
-			} else {
+		if (exceptionDuringCollect == null) {
+			for (final String fieldName : beanFields.keySet()) {
+				final Description testDescription = Description
+						.createTestDescription(testClass, fieldName);
+				final TestCaseNotifier notifier = new TestCaseNotifier(
+						runNotifier, testDescription);
+				notifier.start();
 				try {
 					testField(fieldName, notifier);
 				} catch (final Exception e) {
 					notifier.failure(e);
 				}
+				notifier.finish();
 			}
+		} else {
+			final Description testDescription = Description
+					.createTestDescription(testClass,
+							testClass.getCanonicalName());
+			final TestCaseNotifier notifier = new TestCaseNotifier(runNotifier,
+					testDescription);
+			notifier.start();
+			runNotifier.fireTestFailure(new Failure(testDescription,
+					exceptionDuringCollect));
 			notifier.finish();
 		}
-		beanClass.toString();
 	}
 
 	private void testField(final String fieldName,

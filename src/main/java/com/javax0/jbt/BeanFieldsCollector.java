@@ -10,8 +10,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.javax0.jbt.exception.CanNotInstantiate;
 import com.javax0.jbt.exception.IgnoredFieldDoesNotExist;
 import com.javax0.jbt.exception.IgnoredFieldHasWrongType;
+import com.javax0.jbt.exception.JavaBeanFaultyException;
 import com.javax0.jbt.exception.JavaBeanTestFaultyException;
 
 public class BeanFieldsCollector {
@@ -21,8 +23,8 @@ public class BeanFieldsCollector {
 	private final Map<String, BeanField> beanFields;
 
 	public BeanFieldsCollector(final Class<?> testClass,
-			final Class<?> beanClass) throws InstantiationException,
-			IllegalAccessException, JavaBeanTestFaultyException {
+			final Class<?> beanClass) throws JavaBeanTestFaultyException,
+			JavaBeanFaultyException {
 		super();
 		this.testingClass = testClass;
 		this.beanClass = beanClass;
@@ -34,10 +36,19 @@ public class BeanFieldsCollector {
 		return beanFields;
 	}
 
-	private Map<String, BeanField> collect() throws InstantiationException,
-			IllegalAccessException {
+	private Map<String, BeanField> collect() throws JavaBeanFaultyException {
 		final Field[] fields = beanClass.getDeclaredFields();
-		final Object bean = beanClass.newInstance();
+		final Object bean;
+		try {
+			bean = new BeanFactory(testingClass, beanClass).getBean();
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new CanNotInstantiate(
+					"Can not have an instance of the bean class '" + beanClass
+							+ "'", e);
+		}
+		if (bean == null) {
+
+		}
 		final Map<String, BeanField> beanFields = new HashMap<>();
 
 		for (final Field field : fields) {
@@ -67,10 +78,8 @@ public class BeanFieldsCollector {
 					assertFieldsHaveSameType(field, testedField);
 					fieldNames.add(field.getName());
 				} catch (NoSuchFieldException | SecurityException e) {
-					throw new IgnoredFieldDoesNotExist(
-							"Ignored field '"
-									+ field.getName()
-									+ "' does not exist in the bean");
+					throw new IgnoredFieldDoesNotExist("Ignored field '"
+							+ field.getName() + "' does not exist in the bean");
 				}
 			}
 		}

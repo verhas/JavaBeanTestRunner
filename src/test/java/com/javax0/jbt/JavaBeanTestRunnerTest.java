@@ -14,9 +14,11 @@ import org.junit.runner.notification.RunNotifier;
 import org.mockito.Mockito;
 
 import com.javax0.jbt.testedbeans.AlternateGetterTest;
+import com.javax0.jbt.testedbeans.AnnotatedTestingClass;
 import com.javax0.jbt.testedbeans.CorrectBeanTest;
 import com.javax0.jbt.testedbeans.EmptyTest;
 import com.javax0.jbt.testedbeans.FakeTestClass;
+import com.javax0.jbt.testedbeans.NoDefaultConstructorBeanTest;
 import com.javax0.jbt.testedbeans.NoGetterTest;
 import com.javax0.jbt.testedbeans.NoSetterTest;
 import com.javax0.jbt.testedbeans.NonOrthogonalFieldsTest;
@@ -89,6 +91,13 @@ public class JavaBeanTestRunnerTest {
 	}
 
 	@Test
+	public void testCorrectBeanViaAnnotatedTestingClass() {
+		setupRunner(AnnotatedTestingClass.class);
+		runner.run(notifier);
+		assertRunWasSuccessful();
+	}
+
+	@Test
 	public void primitiveFields() {
 		setupRunner(PrimitiveFieldsTest.class);
 		runner.run(notifier);
@@ -119,6 +128,13 @@ public class JavaBeanTestRunnerTest {
 	@Test
 	public void noSetterBeanFails() {
 		setupRunner(NoSetterTest.class);
+		runner.run(notifier);
+		assertRunFailed();
+	}
+
+	@Test
+	public void noDefaultConstructorBeanFails() {
+		setupRunner(NoDefaultConstructorBeanTest.class);
 		runner.run(notifier);
 		assertRunFailed();
 	}

@@ -7,4 +7,7 @@ public abstract class JavaBeanFaultyException extends Exception {
 		super(message);
 	}
 
+	public JavaBeanFaultyException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

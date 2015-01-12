@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.javax0.jbt.exception.IgnoredFieldDoesNotExist;
 import com.javax0.jbt.exception.IgnoredFieldHasWrongType;
+import com.javax0.jbt.exception.JavaBeanFaultyException;
 import com.javax0.jbt.exception.JavaBeanTestFaultyException;
 
 public class BeanFieldsCollectorTest {
@@ -43,8 +44,8 @@ public class BeanFieldsCollectorTest {
 	}
 
 	@Test
-	public void collectsAllDeclaredFields() throws InstantiationException,
-			IllegalAccessException, JavaBeanTestFaultyException {
+	public void collectsAllDeclaredFields() throws JavaBeanFaultyException,
+			JavaBeanTestFaultyException {
 		Collection<String> fields = new BeanFieldsCollector(Object.class,
 				BeanClass.class).map().keySet();
 		Assert.assertEquals(1, fields.size());
@@ -52,16 +53,16 @@ public class BeanFieldsCollectorTest {
 	}
 
 	@Test
-	public void ignoresFieldsToBeIgnored() throws InstantiationException,
-			IllegalAccessException, JavaBeanTestFaultyException {
+	public void ignoresFieldsToBeIgnored() throws JavaBeanFaultyException,
+			JavaBeanTestFaultyException {
 		Collection<String> fields = new BeanFieldsCollector(TestClass.class,
 				BeanClass.class).map().keySet();
 		Assert.assertEquals(0, fields.size());
 	}
 
 	@Test
-	public void ignoresStaticFields() throws InstantiationException,
-			IllegalAccessException, JavaBeanTestFaultyException {
+	public void ignoresStaticFields() throws JavaBeanFaultyException,
+			JavaBeanTestFaultyException {
 		Collection<String> fields = new BeanFieldsCollector(
 				TestClassNoIgnore.class, BeanClassWithStaticField.class).map()
 				.keySet();
@@ -69,8 +70,8 @@ public class BeanFieldsCollectorTest {
 	}
 
 	@Test
-	public void ignoresFinalFields() throws InstantiationException,
-			IllegalAccessException, JavaBeanTestFaultyException {
+	public void ignoresFinalFields() throws JavaBeanFaultyException,
+			JavaBeanTestFaultyException {
 		Collection<String> fields = new BeanFieldsCollector(
 				TestClassNoIgnore.class, BeanClassWithFinalField.class).map()
 				.keySet();
@@ -79,8 +80,7 @@ public class BeanFieldsCollectorTest {
 
 	@Test(expected = IgnoredFieldDoesNotExist.class)
 	public void throwsExceptionWhenIgnoredFieldDoesNotExist()
-			throws InstantiationException, IllegalAccessException,
-			JavaBeanTestFaultyException {
+			throws JavaBeanFaultyException, JavaBeanTestFaultyException {
 		Collection<String> fields = new BeanFieldsCollector(TestClass.class,
 				BeanClassWithFinalField.class).map().keySet();
 		Assert.assertEquals(0, fields.size());
@@ -88,8 +88,7 @@ public class BeanFieldsCollectorTest {
 
 	@Test(expected = IgnoredFieldHasWrongType.class)
 	public void throwsExceptionWhenIgnoredFieldDoesMatchType()
-			throws InstantiationException, IllegalAccessException,
-			JavaBeanTestFaultyException {
+			throws JavaBeanFaultyException, JavaBeanTestFaultyException {
 		Collection<String> fields = new BeanFieldsCollector(
 				TestClassWrongType.class, BeanClass.class).map().keySet();
 		Assert.assertEquals(0, fields.size());
