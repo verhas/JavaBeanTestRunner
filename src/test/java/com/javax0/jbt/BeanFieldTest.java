@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.javax0.jbt.testedbeans.PrimitiveFields;
 
 public class BeanFieldTest {
-
+//TODO extend unit test
 	@Test
 	public void byteFieldCanBeSetDirectly() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		BeanField beanField = field("byteField").forBean(new PrimitiveFields());

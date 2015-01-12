@@ -18,16 +18,16 @@ import com.javax0.jbt.exception.JavaBeanFaultyException;
 import com.javax0.jbt.exception.JavaBeanTestFaultyException;
 
 public class BeanFieldsCollector {
-	private final Class<?> testingClass;
+	private final Class<?> testClass;
+	private final Object testObject;
 	private final Class<?> beanClass;
 	final Collection<String> ignoredFields;
 	private final Map<String, BeanField> beanFields;
 
-	public BeanFieldsCollector(final Class<?> testClass,
-			final Class<?> beanClass) throws JavaBeanTestFaultyException,
-			JavaBeanFaultyException {
-		super();
-		this.testingClass = testClass;
+	public BeanFieldsCollector(final Object testObject, final Class<?> beanClass)
+			throws JavaBeanTestFaultyException, JavaBeanFaultyException {
+		this.testObject = testObject;
+		this.testClass = testObject.getClass();
 		this.beanClass = beanClass;
 		this.ignoredFields = getIgnoredFields();
 		beanFields = collect();
@@ -41,14 +41,12 @@ public class BeanFieldsCollector {
 		final Field[] fields = beanClass.getDeclaredFields();
 		final Object bean;
 		try {
-			bean = new BeanFactory(testingClass, beanClass).getBean();
-		} catch (InstantiationException | IllegalAccessException e) {
+			bean = new TestedBeanFactory(testObject, beanClass).getBean();
+		} catch (InstantiationException | IllegalAccessException
+				| IllegalArgumentException e) {
 			throw new CanNotInstantiate(
 					"Can not have an instance of the bean class '" + beanClass
 							+ "'", e);
-		}
-		if (bean == null) {
-
 		}
 		final Map<String, BeanField> beanFields = new HashMap<>();
 
@@ -70,7 +68,7 @@ public class BeanFieldsCollector {
 	private Collection<String> getIgnoredFields()
 			throws JavaBeanTestFaultyException {
 		final Set<String> fieldNames = new HashSet<>();
-		for (final Field field : testingClass.getDeclaredFields()) {
+		for (final Field field : testClass.getDeclaredFields()) {
 			final Ignore ignored = (Ignore) field.getAnnotation(Ignore.class);
 			if (ignored != null) {
 				try {

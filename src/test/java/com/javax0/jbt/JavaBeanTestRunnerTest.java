@@ -24,6 +24,9 @@ import com.javax0.jbt.testedbeans.NoSetterTest;
 import com.javax0.jbt.testedbeans.NonOrthogonalFieldsTest;
 import com.javax0.jbt.testedbeans.ObjectFieldsTest;
 import com.javax0.jbt.testedbeans.PrimitiveFieldsTest;
+import com.javax0.jbt.testedbeans.TestWithArgumentFactoryMethod;
+import com.javax0.jbt.testedbeans.TestWithFactoryMethod;
+import com.javax0.jbt.testedbeans.TestWithPrivateFactoryMethod;
 
 public class JavaBeanTestRunnerTest {
 
@@ -98,6 +101,13 @@ public class JavaBeanTestRunnerTest {
 	}
 
 	@Test
+	public void testRunsWithFactoryMethod() {
+		setupRunner(TestWithFactoryMethod.class);
+		runner.run(notifier);
+		assertRunWasSuccessful();
+	}
+
+	@Test
 	public void primitiveFields() {
 		setupRunner(PrimitiveFieldsTest.class);
 		runner.run(notifier);
@@ -133,6 +143,13 @@ public class JavaBeanTestRunnerTest {
 	}
 
 	@Test
+	public void nonOrthogonalFieldsBeanFails() {
+		setupRunner(NonOrthogonalFieldsTest.class);
+		runner.run(notifier);
+		assertRunFailed(NonOrthogonalFieldsTest.NUMBER_OF_NONORTHOGONAL_FIELDS);
+	}
+
+	@Test
 	public void noDefaultConstructorBeanFails() {
 		setupRunner(NoDefaultConstructorBeanTest.class);
 		runner.run(notifier);
@@ -140,9 +157,16 @@ public class JavaBeanTestRunnerTest {
 	}
 
 	@Test
-	public void nonOrthogonalFieldsBeanFails() {
-		setupRunner(NonOrthogonalFieldsTest.class);
+	public void testWithPrivateFactoryMethodFails() {
+		setupRunner(TestWithPrivateFactoryMethod.class);
 		runner.run(notifier);
-		assertRunFailed(NonOrthogonalFieldsTest.NUMBER_OF_NONORTHOGONAL_FIELDS);
+		assertRunFailed();
+	}
+
+	@Test
+	public void testWithArgumentFactoryMethodFails() {
+		setupRunner(TestWithArgumentFactoryMethod.class);
+		runner.run(notifier);
+		assertRunFailed();
 	}
 }

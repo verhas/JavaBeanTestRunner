@@ -24,6 +24,7 @@ public class JavaBeanTestRunner extends Runner {
 
 	private final Class<?> testClass;
 	private final Class<?> beanClass;
+	private final Object testObject;
 	private Map<String, BeanField> beanFields;
 	private Exception exceptionDuringCollect;
 
@@ -31,17 +32,27 @@ public class JavaBeanTestRunner extends Runner {
 		super();
 		this.testClass = testClass;
 		beanClass = new BeanClassCalculator(testClass).calculate();
-		collectBeanFields(testClass);
+		testObject = instantiateTestObject();
+		collectBeanFields(testObject);
 		suiteDescription = Description.createSuiteDescription(
 				this.testClass.getName(), this.testClass.getAnnotations());
 	}
 
-	private void collectBeanFields(final Class<?> testClass) {
+	private Object instantiateTestObject() {
+		try {
+			return testClass.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			exceptionDuringCollect = e;
+			return null;
+		}
+	}
+
+	private void collectBeanFields(final Object testObject) {
 		this.beanFields = null;
 		this.exceptionDuringCollect = null;
 		try {
 			final BeanFieldsCollector collector = new BeanFieldsCollector(
-					testClass, beanClass);
+					testObject, beanClass);
 			this.beanFields = collector.map();
 		} catch (JavaBeanFaultyException | JavaBeanTestFaultyException e) {
 			this.exceptionDuringCollect = e;
