@@ -55,7 +55,7 @@ public class TestCaseNotifierTest {
 		TestCaseNotifier notifier = new TestCaseNotifier(runNotifier,
 				description);
 		notifier.failure(new Throwable());
-		Mockito.verify(runNotifier).fireTestFailure(Matchers.any());
+		Mockito.verify(runNotifier).fireTestFailure((Failure) Matchers.any());
 	}
 
 	@Test
