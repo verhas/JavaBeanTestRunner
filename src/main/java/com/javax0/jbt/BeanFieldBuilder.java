@@ -9,16 +9,16 @@ import java.lang.reflect.Field;
 public class BeanFieldBuilder {
 	private final String fieldName;
 
-	public static BeanFieldBuilder field(String fieldName) {
+	static BeanFieldBuilder field(String fieldName) {
 		return new BeanFieldBuilder(fieldName);
 	}
 
-	public BeanFieldBuilder(String fieldName) {
+	BeanFieldBuilder(String fieldName) {
 		super();
 		this.fieldName = fieldName;
 	}
 
-	public BeanField forBean(Object bean) {
+	BeanField forBean(Object bean) {
 		BeanMethod getter = getter(fieldName).forBean(bean);
 		BeanMethod alternateGetter = alternateGetter(fieldName).forBean(bean);
 		BeanMethod setter = setter(fieldName).forBean(bean);

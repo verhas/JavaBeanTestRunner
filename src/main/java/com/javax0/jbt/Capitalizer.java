@@ -1,7 +1,7 @@
 package com.javax0.jbt;
 
-public interface Capitalizer {
-	public static String capitalize(final String string) {
+class Capitalizer {
+	static String capitalize(final String string) {
 		if (string == null || string.isEmpty()) {
 			return "";
 		}

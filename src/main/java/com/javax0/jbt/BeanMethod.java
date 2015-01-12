@@ -11,26 +11,26 @@ import java.lang.reflect.Method;
  * @author Peter Verhas
  *
  */
-public class BeanMethod {
+class BeanMethod {
 	private final Method method;
 	private final Object bean;
 
-	public BeanMethod(Method method, Object bean) {
+	BeanMethod(Method method, Object bean) {
 		super();
 		this.method = method;
 		this.bean = bean;
 	}
 
-	public Object getBean() {
+	Object getBean() {
 		return bean;
 	}
 
-	public Object invoke() throws IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+	Object invoke() throws IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException {
 		return method.invoke(bean, new Object[] {});
 	}
 
-	public Object invoke(Object object) throws IllegalAccessException,
+	Object invoke(Object object) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		return method.invoke(bean, new Object[] { object });
 	}

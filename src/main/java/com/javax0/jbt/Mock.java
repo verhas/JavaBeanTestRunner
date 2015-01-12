@@ -7,7 +7,7 @@ import org.mockito.exceptions.base.MockitoException;
 
 import com.google.common.collect.ImmutableMap;
 
-public class Mock {
+class Mock {
 
 	private static final Map<Class<?>, Object> mocks = new ImmutableMap.Builder<Class<?>, Object>()
 			.put(Short.class, Short.valueOf((short) 1))
@@ -32,7 +32,7 @@ public class Mock {
 			.put(double.class, Double.valueOf(0.0d))
 			.put(byte.class, Byte.valueOf((byte) 0)).build();
 
-	public static Object nullForClass(Class<?> klass) {
+	static Object nullForClass(Class<?> klass) {
 		if (primitiveNulls.containsKey(klass)) {
 			return primitiveNulls.get(klass);
 		}
@@ -42,7 +42,7 @@ public class Mock {
 		return null;
 	}
 
-	public static Object forClass(Class<?> klass) {
+	static Object forClass(Class<?> klass) {
 		if (mocks.containsKey(klass)) {
 			return mocks.get(klass);
 		}

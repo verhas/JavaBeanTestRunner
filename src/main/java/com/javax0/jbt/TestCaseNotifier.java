@@ -12,7 +12,7 @@ import org.junit.runner.notification.RunNotifier;
  * @author Peter Verhas <peter@verhas.com>
  *
  */
-public class TestCaseNotifier {
+class TestCaseNotifier {
 	@SuppressWarnings("serial")
 	static final class NotificationException extends Exception {
 		final String message;
@@ -36,26 +36,26 @@ public class TestCaseNotifier {
 	final RunNotifier notifier;
 	final Description testDescription;
 
-	public TestCaseNotifier(RunNotifier notifier, Description testDescription) {
+	TestCaseNotifier(RunNotifier notifier, Description testDescription) {
 		super();
 		this.notifier = notifier;
 		this.testDescription = testDescription;
 	}
 
-	public void start() {
+	void start() {
 		notifier.fireTestRunStarted(testDescription);
 	}
 
-	public void failure(Throwable throwable) {
+	void failure(Throwable throwable) {
 		notifier.fireTestFailure(new Failure(testDescription, throwable));
 	}
 
-	public void failure(String message) {
+	void failure(String message) {
 		notifier.fireTestFailure(new Failure(testDescription,
 				new NotificationException(message)));
 	}
 
-	public void finish() {
+	void finish() {
 		notifier.fireTestFinished(testDescription);
 	}
 }

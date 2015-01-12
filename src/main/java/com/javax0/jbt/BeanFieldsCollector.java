@@ -17,14 +17,14 @@ import com.javax0.jbt.exception.IgnoredFieldHasWrongType;
 import com.javax0.jbt.exception.JavaBeanFaultyException;
 import com.javax0.jbt.exception.JavaBeanTestFaultyException;
 
-public class BeanFieldsCollector {
+class BeanFieldsCollector {
 	private final Class<?> testClass;
 	private final Object testObject;
 	private final Class<?> beanClass;
 	final Collection<String> ignoredFields;
 	private final Map<String, BeanField> beanFields;
 
-	public BeanFieldsCollector(final Object testObject, final Class<?> beanClass)
+	BeanFieldsCollector(final Object testObject, final Class<?> beanClass)
 			throws JavaBeanTestFaultyException, JavaBeanFaultyException {
 		this.testObject = testObject;
 		this.testClass = testObject.getClass();
@@ -33,7 +33,7 @@ public class BeanFieldsCollector {
 		beanFields = collect();
 	}
 
-	public Map<String, BeanField> map() {
+	Map<String, BeanField> map() {
 		return beanFields;
 	}
 

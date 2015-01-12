@@ -1,5 +1,6 @@
 package com.javax0.jbt.testedbeans;
 
+
 /**
  * See {@link FakeTestClass}.
  * 

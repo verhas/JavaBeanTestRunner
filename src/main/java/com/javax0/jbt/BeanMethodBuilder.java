@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
  * @author Peter Verhas <peter@verhas.com>
  *
  */
-public class BeanMethodBuilder {
+class BeanMethodBuilder {
 	private static final Class<?>[] NO_ARGS = new Class<?>[0];
 	private Class<?> beanClass;
 	private final String fieldName;
@@ -38,7 +38,7 @@ public class BeanMethodBuilder {
 	 * @param fieldName
 	 * @return
 	 */
-	public static BeanMethodBuilder getter(String fieldName) {
+	static BeanMethodBuilder getter(String fieldName) {
 		BeanMethodBuilder bmb = bean("get", fieldName);
 		bmb.isSetter = false;
 		bmb.fieldTypeShouldBeBoolean = false;
@@ -52,7 +52,7 @@ public class BeanMethodBuilder {
 	 * @param fieldName
 	 * @return
 	 */
-	public static BeanMethodBuilder alternateGetter(String fieldName) {
+	static BeanMethodBuilder alternateGetter(String fieldName) {
 		BeanMethodBuilder bmb = bean("is", fieldName);
 		bmb.isSetter = false;
 		bmb.fieldTypeShouldBeBoolean = true;
@@ -85,7 +85,7 @@ public class BeanMethodBuilder {
 	 *            work on.
 	 * @return the {@link BeanMethod} built.
 	 */
-	public BeanMethod forBean(Object bean) {
+	BeanMethod forBean(Object bean) {
 		final BeanMethod beanMethod;
 		this.beanClass = bean.getClass();
 		this.bean = bean;
@@ -113,7 +113,7 @@ public class BeanMethodBuilder {
 		return beanMethod;
 	}
 
-	protected Method getMethod(String methodName) {
+	Method getMethod(String methodName) {
 		Method method;
 		try {
 			method = beanClass.getMethod(methodName, argumentTypes());

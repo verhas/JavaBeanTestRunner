@@ -22,7 +22,7 @@ import com.javax0.jbt.annotations.Bean;
  * @author Peter Verhas <peter@verhas.com>
  *
  */
-public class BeanClassCalculator {
+class BeanClassCalculator {
 	private final Class<?> testingClass;
 	private final String testingClassName;
 	private static final String TEST_CLASS_NAME_POSTFIX = "Test";
@@ -33,7 +33,7 @@ public class BeanClassCalculator {
 	 * 
 	 * @param testingClass
 	 */
-	public BeanClassCalculator(Class<?> testingClass) {
+	BeanClassCalculator(Class<?> testingClass) {
 		super();
 		this.testingClass = testingClass;
 		testingClassName = testingClass.getName();
@@ -45,7 +45,7 @@ public class BeanClassCalculator {
 	 * 
 	 * @return the class to test or null if the class can not be identified.
 	 */
-	public Class<?> calculate() {
+	Class<?> calculate() {
 		final Bean bean = (Bean) testingClass.getAnnotation(Bean.class);
 		final Class<?> testedBeanClass;
 		if (bean != null) {

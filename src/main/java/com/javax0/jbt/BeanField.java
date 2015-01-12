@@ -3,14 +3,14 @@ package com.javax0.jbt;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
-public class BeanField {
+class BeanField {
 	private final Class<?> type;
 	private final String name;
 	private final BeanMethod getter;
 	private final BeanMethod alternateGetter;
 	private final BeanMethod setter;
 
-	public BeanField(Class<?> type, String name, BeanMethod getter,
+	BeanField(Class<?> type, String name, BeanMethod getter,
 			BeanMethod alternateGetter, BeanMethod setter) {
 		this.type = type;
 		this.name = name;
@@ -19,49 +19,49 @@ public class BeanField {
 		this.setter = setter;
 	}
 
-	public Class<?> getType() {
+	Class<?> getType() {
 		return type;
 	}
 
-	public String getName() {
+	String getName() {
 		return name;
 	}
 
-	public BeanMethod getGetter() {
+	BeanMethod getGetter() {
 		return getter;
 	}
 
-	public boolean hasGetter() {
+	boolean hasGetter() {
 		return getGetter() != null;
 	}
 
-	public BeanMethod getAlternateGetter() {
+	BeanMethod getAlternateGetter() {
 		return alternateGetter;
 	}
 
-	public boolean hasAlternateGetter() {
+	boolean hasAlternateGetter() {
 		return getAlternateGetter() != null;
 	}
 
-	public BeanMethod getSetter() {
+	BeanMethod getSetter() {
 		return setter;
 	}
 
-	public boolean hasSetter() {
+	boolean hasSetter() {
 		return getSetter() != null;
 	}
 
-	public void set(Object object) throws IllegalAccessException,
+	void set(Object object) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		setter.invoke(object);
 	}
 
-	public Object get() throws IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+	Object get() throws IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException {
 		return invokeGet(getter);
 	}
 
-	public Object alternateGet() throws IllegalAccessException,
+	Object alternateGet() throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		return invokeGet(alternateGetter);
 	}
@@ -71,8 +71,8 @@ public class BeanField {
 		return method.invoke();
 	}
 
-	public Object directGet() throws IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException, SecurityException {
+	Object directGet() throws IllegalArgumentException, IllegalAccessException,
+			NoSuchFieldException, SecurityException {
 		final Object object = getBean();
 		if (object != null) {
 			Field field = object.getClass().getDeclaredField(name);
@@ -84,7 +84,7 @@ public class BeanField {
 
 	}
 
-	public void directSet(Object value) throws IllegalArgumentException,
+	void directSet(Object value) throws IllegalArgumentException,
 			IllegalAccessException, NoSuchFieldException, SecurityException {
 		final Object object = getBean();
 		if (object != null) {
