@@ -88,8 +88,9 @@ public class JavaBeanTestRunner extends Runner {
 					testField(fieldName, notifier);
 				} catch (final Exception e) {
 					notifier.failure(e);
+				} finally {
+					notifier.finish();
 				}
-				notifier.finish();
 			}
 		} else {
 			final Description testDescription = Description

@@ -31,7 +31,7 @@ import com.javax0.jbt.testedbeans.TestWithPrivateFactoryMethod;
 public class JavaBeanTestRunnerTest {
 
 	private void assertRunWasSuccessful() {
-		verify(notifier, Mockito.atLeast(1)).fireTestRunStarted(
+		verify(notifier, Mockito.atLeast(1)).fireTestStarted(
 				any(Description.class));
 		verify(notifier, never()).fireTestFailure(any(Failure.class));
 		verify(notifier, Mockito.atLeast(1)).fireTestFinished(
@@ -39,7 +39,7 @@ public class JavaBeanTestRunnerTest {
 	}
 
 	private void assertRunsWereSuccessful() {
-		verify(notifier, Mockito.atLeast(1)).fireTestRunStarted(
+		verify(notifier, Mockito.atLeast(1)).fireTestStarted(
 				any(Description.class));
 		verify(notifier, never()).fireTestFailure(any(Failure.class));
 		verify(notifier, Mockito.atLeast(1)).fireTestFinished(
@@ -47,13 +47,13 @@ public class JavaBeanTestRunnerTest {
 	}
 
 	private void assertRunFailed() {
-		verify(notifier).fireTestRunStarted(any(Description.class));
+		verify(notifier).fireTestStarted(any(Description.class));
 		verify(notifier).fireTestFailure(any(Failure.class));
 		verify(notifier).fireTestFinished(any(Description.class));
 	}
 
 	private void assertRunFailed(int times) {
-		verify(notifier, Mockito.atLeast(1)).fireTestRunStarted(
+		verify(notifier, Mockito.atLeast(1)).fireTestStarted(
 				any(Description.class));
 		verify(notifier, Mockito.atLeast(times)).fireTestFailure(
 				any(Failure.class));
@@ -62,7 +62,7 @@ public class JavaBeanTestRunnerTest {
 	}
 
 	private void assertNoTestWasStarted() {
-		verify(notifier, never()).fireTestRunStarted(any(Description.class));
+		verify(notifier, never()).fireTestStarted(any(Description.class));
 		verify(notifier, never()).fireTestFailure(any(Failure.class));
 		verify(notifier, never()).fireTestFinished(any(Description.class));
 	}

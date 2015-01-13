@@ -43,7 +43,7 @@ class TestCaseNotifier {
 	}
 
 	void start() {
-		notifier.fireTestRunStarted(testDescription);
+		notifier.fireTestStarted(testDescription);
 	}
 
 	void failure(Throwable throwable) {
